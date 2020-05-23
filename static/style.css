@@ -1,0 +1,15 @@
+/* Color Palette Docs https://www.color-hex.com/color-palette/25362 */
+body {
+  background-color: #23272a;
+  color: #ffffff; }
+
+#login {
+  background-color: #2c2f33;
+  padding: 10px;
+  margin: auto;
+  border-radius: 30px;
+  text-align: center; }
+  #login button {
+    background-color: #7289da; }
+
+/*# sourceMappingURL=style.css.map */
