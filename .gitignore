@@ -4,7 +4,7 @@ __pycache__/
 *$py.class
 
 # Personal
-.sass-cache/
+.sass-cache/*
 .env
 
 # C extensions
