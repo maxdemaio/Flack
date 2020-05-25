@@ -3,8 +3,17 @@
 
 {% block body %}
 
-<div id="chat">
-    Chat block here.
-</div>
+    <h2>Chat AJAX Test</h2>
+    <div>
+        Type a message here:
+    </div>
 
+    <ul id="posts">
+
+    </ul>
+
+    <form id="new-message">
+        <input id="message" class="input" type="text" placeholder="Message">
+        <button class="submit" type="submit">Send</button>
+    </form>
 {% endblock %}

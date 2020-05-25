@@ -3,13 +3,14 @@ body {
   background-color: #23272a;
   color: #ffffff; }
 
+button {
+  background-color: #7289da; }
+
 #login {
   background-color: #2c2f33;
   padding: 10px;
   margin: auto;
   border-radius: 30px;
   text-align: center; }
-  #login button {
-    background-color: #7289da; }
 
 /*# sourceMappingURL=style.css.map */

@@ -10,10 +10,11 @@ body {
     color: $color1;
 }
 
+button {
+    background-color: $color0;
+}
+
 #login {
-    button {
-        background-color: $color0;
-    }
     background-color: $color3;
     padding: 10px;
     margin: auto;
