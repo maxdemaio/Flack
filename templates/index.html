@@ -1,7 +1,36 @@
-{% extends "layout.html" %}
-{% block title %}Index{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block body %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css" />
+    <script>
+    // Submit button enabling (input and submit classes)
+        document.addEventListener("DOMContentLoaded", () => {
+
+            // By default the button is disabled
+            document.querySelector(".submit").disabled = true;
+
+            // Enable button only if there is text in the input field
+            document.querySelector(".input").onkeyup = () => {
+                if (document.querySelector(".input").value.length > 0)
+                    document.querySelector(".submit").disabled = false;
+                else
+                    document.querySelector(".submit").disabled = true;
+            };
+        });
+    </script>
+    <title>Flack - Index</title>
+</head>
+
+<body>
+
+    <header>
+        <nav>
+            Interesting navigation information here.
+        </nav>
+    </header>
 
     <div id="login">
         <p>Flack Logo Here.</p>
@@ -11,4 +40,6 @@
         </form>
     </div>
 
-{% endblock %}
+</body>
+
+</html>

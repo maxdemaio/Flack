@@ -1,19 +1,39 @@
-{% extends "layout.html" %}
-{% block title %}Index{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css" />
+    <script src="/static/scripts.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
 
-{% block body %}
+    <title>Flack - Chat</title>
+</head>
+<body>
+
+    <header>
+        <nav>
+            Interesting navigation information here.
+        </nav>
+    </header>
 
     <h2>Chat AJAX Test</h2>
     <div>
         Type a message here:
     </div>
-
-    <ul id="posts">
-
+    
+    <!--New message-->
+    <ul id="example">
     </ul>
-
+    
+    <!--Chat posts-->
+    <div id="posts">
+    </div>
+    
     <form id="new-message">
         <input id="message" class="input" type="text" placeholder="Message">
         <button class="submit" type="submit">Send</button>
     </form>
-{% endblock %}
+
+</body>
+</html>
