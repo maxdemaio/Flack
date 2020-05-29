@@ -1,5 +1,45 @@
+// Set quantity of posts to be loaded (Change to 100)
+const quantity = 10;
+
+// Load posts
+function load() {
+
+    // Open new request to get posts
+    const request = new XMLHttpRequest();
+    request.open("POST", "/posts");
+    request.onload = () => {
+        const data = JSON.parse(request.responseText);
+        data.forEach(add_post);
+    };
+
+    // Send quantity of posts to back-end
+    const data = new FormData();
+    data.append('quantity', quantity);
+
+    // Send request
+    request.send()
+};
+
+// Add post to the DOM with its contents
+// Do so with handlebar.js
+function add_post(contents) {
+
+    // Create new post.
+    const post = document.createElement("div");
+    post.className = "post";
+    post.innerHTML = contents;
+
+    // Add post to DOM.
+    document.querySelector("#posts").append(post);
+};
+
+
 // Submit button enabling (input and submit classes)
 document.addEventListener("DOMContentLoaded", () => {
+    
+    // Load posts
+    load()
+
     // By default the button is disabled
     document.querySelector(".submit").disabled = true;
 
@@ -19,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
         li.innerHTML = document.querySelector("#message").value;
 
         // Add new message to list
-        document.querySelector("#posts").append(li);
+        document.querySelector("#example").append(li);
 
         // Clear the input field and disable button again
         document.querySelector("#message").value = "";
@@ -28,6 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Stop form from submitting
         return false;
     };
+
 });
 
 
