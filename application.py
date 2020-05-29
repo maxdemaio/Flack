@@ -24,6 +24,21 @@ def chat():
 @app.route("/posts", methods=["POST"])
 def posts():
     pass
-    # """ AJAX route that obtains posts """
-    # message = (request.form.get("start")
-    #     return jsonify(message)
+    """ AJAX route that obtains posts for chat room """
+    
+    # Each room will have a list of posts which we will read in
+    # We will populate the empty list and fetch them for the client here
+    # Read from the text file associated with room
+    
+    # Get amount of posts to be loaded
+    quantity = int(request.form.get("quantity") or 10)
+
+    # Populate list of posts
+    data = [] 
+
+    # Display 100 posts
+    for i in range(0, quantity):
+        data.append(f"Post #{i + 1}")
+
+    # Return list of posts
+    return jsonify(data)
