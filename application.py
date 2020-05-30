@@ -42,3 +42,11 @@ def posts():
 
     # Return list of posts
     return jsonify(data)
+
+# Change to be for the specific room
+# Create text file for room inside ./rooms (bankend handling)
+@socketio.on("submit message")
+def submitMessage(data):
+    """ Broadcast new messages in the chat """
+    contents = data["contents"]
+    emit("send message", {"contents":contents}, broadcast=True)

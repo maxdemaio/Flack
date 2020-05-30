@@ -51,24 +51,37 @@ document.addEventListener("DOMContentLoaded", () => {
             document.querySelector(".submit").disabled = true;
     };
 
+    // Web Socket version
     // Message sent (Change to AJAX/Web Socket version)
     // Store in local storage
-    document.querySelector("#new-message").onsubmit = () => {
-        // Create new li for message
-        const li = document.createElement('li');
-        li.innerHTML = document.querySelector("#message").value;
 
-        // Add new message to list
+    // Connect to websocket
+    var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+
+
+    // When connected, configure submit button
+    socket.on('connect', () => {
+
+        document.querySelector("#new-message").onsubmit = () => {
+            const contents = document.querySelector("#message").value;
+            console.log(contents);
+            socket.emit("submit message", {"contents": contents});
+
+            // Clear the input field and disable button again
+            document.querySelector("#message").value = "";
+            document.querySelector(".submit").disabled = true;
+
+            // Stop form from submitting
+            return false;
+        };
+    });
+
+    // When a new message is broadcasted, add to the unordered list
+    socket.on("send message", data => {
+        const li = document.createElement("li");
+        li.innerHTML = `${data.contents}`;
         document.querySelector("#example").append(li);
-
-        // Clear the input field and disable button again
-        document.querySelector("#message").value = "";
-        document.querySelector(".submit").disabled = true;
-
-        // Stop form from submitting
-        return false;
-    };
-
+    });
 });
 
 
