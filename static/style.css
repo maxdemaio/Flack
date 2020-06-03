@@ -1,7 +1,8 @@
 /* Color Palette Docs https://www.color-hex.com/color-palette/25362 */
+/* Icon ideas: https://www.flaticon.com/free-icon/network_3003026 */
 body {
-  background-color: #23272a;
-  color: #ffffff; }
+  background-color: #23272a !important;
+  color: #ffffff !important; }
 
 button {
   background-color: #7289da; }

@@ -3,7 +3,6 @@ import os, settings
 from flask import Flask, jsonify, render_template, request
 from flask_socketio import SocketIO, emit
 
-
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 socketio = SocketIO(app)
@@ -43,6 +42,8 @@ def posts():
     # Return list of posts
     return jsonify(data)
 
+# Socket IO Event Handlers
+
 # Change to be for the specific room
 # Create text file for room inside ./rooms (bankend handling)
 @socketio.on("submit message")
@@ -50,3 +51,19 @@ def submitMessage(data):
     """ Broadcast new messages in the chat """
     contents = data["contents"]
     emit("send message", {"contents":contents}, broadcast=True)
+
+# Upon join, update active users
+@socketio.on('join')
+def on_join(data):
+    username = data['username']
+    room = data['room']
+    join_room(room)
+    send(username + ' has entered the room.', room=room)
+
+# Upon leave, update active users
+@socketio.on('leave')
+def on_leave(data):
+    username = data['username']
+    room = data['room']
+    leave_room(room)
+    send(username + ' has left the room.', room=room)

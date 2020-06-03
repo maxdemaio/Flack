@@ -1,3 +1,8 @@
+// Save last visited channel for user (default general)
+if (!localStorage.getItem('last-channel')) {
+    localStorage.setItem('last-channel', "general")
+};
+
 // Set quantity of posts to be loaded (Change to 100)
 const quantity = 10;
 
