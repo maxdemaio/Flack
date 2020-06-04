@@ -1,7 +1,7 @@
 import os, settings
 
 from flask import Flask, jsonify, render_template, request
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit, send
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
@@ -67,3 +67,12 @@ def on_leave(data):
     room = data['room']
     leave_room(room)
     send(username + ' has left the room.', room=room)
+
+@socketio.on("message")
+def message(data):
+    print(f"\n\n{data}\n\n")
+    send(data)
+
+
+if __name__ == "__main__":
+    socketio.run(app, debug=True)

@@ -64,8 +64,10 @@ document.addEventListener("DOMContentLoaded", () => {
     var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
 
-    // When connected, configure submit button
+    // When connected, configure submit button (event bucket)
     socket.on('connect', () => {
+
+        socket.send("Connected");
 
         document.querySelector("#new-message").onsubmit = () => {
             const contents = document.querySelector("#message").value;
@@ -79,6 +81,10 @@ document.addEventListener("DOMContentLoaded", () => {
             // Stop form from submitting
             return false;
         };
+    });
+
+    socket.on("message", data => {
+        console.log(`Message received: ${data}`)
     });
 
     // When a new message is broadcasted, add to the unordered list
