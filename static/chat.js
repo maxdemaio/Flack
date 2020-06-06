@@ -1,3 +1,8 @@
+// If the user tries to log-in without a username, default to anonymous
+if (!localStorage.getItem('storedUser')) {
+    localStorage.setItem('storedUser', 'anonymous')
+};
+
 // Save last visited channel for user (default general)
 if (!localStorage.getItem('last-channel')) {
     localStorage.setItem('last-channel', "general")
@@ -26,7 +31,6 @@ function load() {
 };
 
 // Add post to the DOM with its contents
-// Do so with handlebar.js
 function add_post(contents) {
 
     // Create new post.
@@ -39,7 +43,6 @@ function add_post(contents) {
 };
 
 
-// Submit button enabling (input and submit classes)
 document.addEventListener("DOMContentLoaded", () => {
     
     // Load posts
@@ -56,23 +59,16 @@ document.addEventListener("DOMContentLoaded", () => {
             document.querySelector(".submit").disabled = true;
     };
 
-    // Web Socket version
-    // Message sent (Change to AJAX/Web Socket version)
-    // Store in local storage
-
     // Connect to websocket
     var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
-
-    // When connected, configure submit button (event bucket)
+    // Function for when websockets are connected
     socket.on('connect', () => {
 
-        socket.send("Connected");
-
+        // User has submitted message, send to server with username
         document.querySelector("#new-message").onsubmit = () => {
             const contents = document.querySelector("#message").value;
-            console.log(contents);
-            socket.emit("submit message", {"contents": contents});
+            socket.send([contents, localStorage.getItem('storedUser')]);
 
             // Clear the input field and disable button again
             document.querySelector("#message").value = "";
@@ -83,16 +79,16 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     });
 
+    // Response from server message bucket
     socket.on("message", data => {
-        console.log(`Message received: ${data}`)
+        const p = document.createElement('p');
+        const br = document.createElement('br');
+        p.innerHTML = data;
+
+        // Append to DOM
+        document.querySelector("#display-message-section").append(p)
     });
 
-    // When a new message is broadcasted, add to the unordered list
-    socket.on("send message", data => {
-        const li = document.createElement("li");
-        li.innerHTML = `${data.contents}`;
-        document.querySelector("#example").append(li);
-    });
 });
 
 

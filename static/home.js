@@ -1,9 +1,3 @@
-// Check if user is already signed in
-// If so, redirect them to their most recently visited chat
-if (localStorage.getItem('storedUser')) {
-    // TODO
-};
-
 // Submit button enabling (input and submit classes)
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -21,7 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // Upon username submission, update the username for that user
     document.querySelector("#new-user").onsubmit = () => {
         const contents = document.querySelector("#username").value;
-        console.log(contents);
         localStorage.setItem('storedUser', contents)
 
         // Clear the input field and disable button again

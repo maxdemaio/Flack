@@ -42,15 +42,7 @@ def posts():
     # Return list of posts
     return jsonify(data)
 
-# Socket IO Event Handlers
-
-# Change to be for the specific room
-# Create text file for room inside ./rooms (bankend handling)
-@socketio.on("submit message")
-def submitMessage(data):
-    """ Broadcast new messages in the chat """
-    contents = data["contents"]
-    emit("send message", {"contents":contents}, broadcast=True)
+# Socket IO event bucket handlers
 
 # Upon join, update active users
 @socketio.on('join')
@@ -70,8 +62,11 @@ def on_leave(data):
 
 @socketio.on("message")
 def message(data):
-    print(f"\n\n{data}\n\n")
-    send(data)
+    """ Broadcast message with username """
+    contents = data[0]
+    username = data[1]
+    print(data)
+    send(data[0])
 
 
 if __name__ == "__main__":
