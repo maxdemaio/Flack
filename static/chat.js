@@ -1,8 +1,12 @@
-// If the user tries to log-in without a username, default to anonymous
+// No username / room defaults
 if (!localStorage.getItem('storedUser')) {
     localStorage.setItem('storedUser', 'anonymous')
 };
+if (!localStorage.getItem('room')) {
+    localStorage.setItem('room', 'Lounge')
+};
 
+// TODO
 // Save last visited channel for user (default general)
 if (!localStorage.getItem('last-channel')) {
     localStorage.setItem('last-channel', "general")
@@ -65,10 +69,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // Function for when websockets are connected
     socket.on('connect', () => {
 
-        // User has submitted message, send to server with username
+        // Send message, username, and room to server
         document.querySelector("#new-message").onsubmit = () => {
+            const data = new Object;
             const contents = document.querySelector("#message").value;
-            socket.send([contents, localStorage.getItem('storedUser')]);
+            data.message = contents;
+            data.username = localStorage.getItem('storedUser');
+            data.room = localStorage.getItem('room');
+            socket.send(data);
 
             // Clear the input field and disable button again
             document.querySelector("#message").value = "";
@@ -79,15 +87,49 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     });
 
-    // Response from server message bucket
+    // Display incoming message from server
     socket.on("message", data => {
         const p = document.createElement('p');
+        const spanUser = document.createElement('span');
         const br = document.createElement('br');
-        p.innerHTML = data;
+        const spanTime = document.createElement('span');
+        spanTime.innerHTML = data.time;
+        spanUser.innerHTML = data.username;
+        p.innerHTML = spanUser.outerHTML + br.outerHTML + data.message 
+            + br.outerHTML + spanTime.outerHTML;
 
         // Append to DOM
         document.querySelector("#display-message-section").append(p)
     });
+
+    // Room selection
+    document.querySelectorAll(".select-room").forEach(p => {
+        p.onclick = () => {
+            let newRoom = p.innerHTML;
+            if (newRoom == room) {
+                msg = `You are already in the ${room} room.`
+                printSysMsg(msg);
+            } else {
+                leaveRoom(localStorage.getItem('room'));
+                joinRoom(newRoom);
+                localStorage.setItem('room', `newRoom`);
+            }
+        };
+    });
+
+    // Leave room function
+    function leaveRoom(room) {
+        socket.emit("leave", { "username": localStorage.getItem('storedUser'), "room": room})
+    };
+
+    // Join room function
+    function joinRoom(room) {
+        socket.emit("join", { "username": localStorage.getItem('storedUser'), "room": room})
+        // TODO 
+        // Display messages for that room
+        // Append messages to display section ID
+        // document.querySelector("#display-message-section")
+    };
 
 });
 
