@@ -48,6 +48,12 @@ def posts():
 @socketio.on("message")
 def message(data):
     """ Broadcast message, username, and time """
+    
+    # TODO 
+    # Store message related to room in a text file with the name of that room
+    # If the CSV file doesn't already exist in rooms dir, create w/ "roomName.csv"
+    # Add message, username, time to new line in CSV
+
     print(data)
     send({"message": data["message"], "username": data["username"], "time": strftime('%b-%d %I:%M%p', localtime())})
 

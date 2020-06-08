@@ -6,11 +6,13 @@ if (!localStorage.getItem('room')) {
     localStorage.setItem('room', 'Lounge')
 };
 
-// Set quantity of posts to be loaded (Change to 100)
+// Set quantity of posts to be loaded from room CSV (Change to 100)
 const quantity = 10;
 
 // Load posts
 // TODO Specificy based on the room
+// Actually instead of an HTTP request, I make an custom event call to server side
+// Pass the current room, and the server passes back to client the total messages for that room to load
 function load() {
 
     // Open new request to get posts
@@ -29,7 +31,7 @@ function load() {
     request.send()
 };
 
-// Add post to the DOM with its contents
+// Add room posts to the DOM with their contents
 function add_post(contents) {
 
     // Create new post.
@@ -44,7 +46,7 @@ function add_post(contents) {
 
 document.addEventListener("DOMContentLoaded", () => {
     
-    // Load posts
+    // Load posts for room
     load()
 
     // By default the button is disabled
@@ -127,5 +129,3 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
 });
-
-
