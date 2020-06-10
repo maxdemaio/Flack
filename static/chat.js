@@ -9,10 +9,7 @@ if (!localStorage.getItem('room')) {
 // Set quantity of posts to be loaded from room CSV (Change to 100)
 const quantity = 10;
 
-// Load posts
-// TODO Specificy based on the room
-// Actually instead of an HTTP request, I make an custom event call to server side
-// Pass the current room, and the server passes back to client the total messages for that room to load
+// Load posts for room
 function load() {
 
     // Open new request to get posts
@@ -35,12 +32,12 @@ function load() {
 function add_post(contents) {
 
     // Create new post.
-    const post = document.createElement("div");
+    const post = document.createElement("p");
     post.className = "post";
     post.innerHTML = contents;
 
     // Add post to DOM.
-    document.querySelector("#posts").append(post);
+    document.querySelector("#display-message-section").append(post);
 };
 
 
@@ -92,6 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const spanTime = document.createElement('span');
         spanTime.innerHTML = data.time;
         spanUser.innerHTML = data.username;
+        p.className = "post";
         p.innerHTML = spanUser.outerHTML + br.outerHTML + data.message 
             + br.outerHTML + spanTime.outerHTML;
 
@@ -103,13 +101,14 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".select-room").forEach(p => {
         p.onclick = () => {
             let newRoom = p.innerHTML;
+            room = localStorage.getItem("room");
             if (newRoom == room) {
                 msg = `You are already in the ${room} room.`
                 printSysMsg(msg);
             } else {
                 leaveRoom(localStorage.getItem('room'));
                 joinRoom(newRoom);
-                localStorage.setItem('room', `newRoom`);
+                localStorage.setItem('room', `${newRoom}`);
             }
         };
     });
@@ -122,10 +121,19 @@ document.addEventListener("DOMContentLoaded", () => {
     // Join room function
     function joinRoom(room) {
         socket.emit("join", { "username": localStorage.getItem('storedUser'), "room": room})
+        // Clear messages in chat from previous room
+        document.querySelector("#display-message-section").innerHTML = '';
+        load()
         // TODO 
-        // Display messages for that room
+        // Display messages for current room
         // Append messages to display section ID
         // document.querySelector("#display-message-section")
     };
 
+    // Print system message
+    function printSysMsg(msg) {
+        const p = document.createElement("p");
+        p.innerHTML = msg;
+        document.querySelector("#display-message-section").append(p);
+    };
 });
