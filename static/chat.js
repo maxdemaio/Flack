@@ -1,9 +1,9 @@
 // No username / room defaults
 if (!localStorage.getItem('storedUser')) {
-    localStorage.setItem('storedUser', 'anonymous')
+    localStorage.setItem('storedUser', 'anonymous');
 };
 if (!localStorage.getItem('room')) {
-    localStorage.setItem('room', 'Lounge')
+    localStorage.setItem('room', 'Lounge');
 };
 
 // Set quantity of posts to be loaded from room CSV (Change to 100)
@@ -42,9 +42,6 @@ function add_post(contents) {
 
 
 document.addEventListener("DOMContentLoaded", () => {
-    
-    // Load posts for room
-    load()
 
     // By default the button is disabled
     document.querySelector(".submit").disabled = true;
@@ -59,6 +56,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Connect to websocket
     var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+
+    // Join last visited room on entering
+    joinRoom(localStorage.getItem('room'));
 
     // Function for when websockets are connected
     socket.on('connect', () => {
@@ -87,14 +87,20 @@ document.addEventListener("DOMContentLoaded", () => {
         const spanUser = document.createElement('span');
         const br = document.createElement('br');
         const spanTime = document.createElement('span');
-        spanTime.innerHTML = data.time;
-        spanUser.innerHTML = data.username;
-        p.className = "post";
-        p.innerHTML = spanUser.outerHTML + br.outerHTML + data.message 
-            + br.outerHTML + spanTime.outerHTML;
 
-        // Append to DOM
-        document.querySelector("#display-message-section").append(p)
+        if (data.username) {
+            spanTime.innerHTML = data.time;
+            spanUser.innerHTML = data.username;
+            p.className = "post";
+            p.innerHTML = spanUser.outerHTML + br.outerHTML + data.message
+                + br.outerHTML + spanTime.outerHTML;
+
+            // Append to DOM
+            document.querySelector("#display-message-section").append(p);
+        } else {
+            printSysMsg(data.message);
+        };
+        
     });
 
     // Room selection
