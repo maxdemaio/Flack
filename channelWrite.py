@@ -4,7 +4,7 @@ import os
 quantity = 3
 
 # Add new message to channel delimited by newlines
-with open("./channels/exampleChannel.txt", "r+") as channel:
+with open("./channels/Chess.txt", "r+") as channel:
     data = channel.read().splitlines()
     currentLength = len(data)
     
@@ -22,4 +22,4 @@ with open("./channels/exampleChannel.txt", "r+") as channel:
         channel.write("New incoming message")
         
     else:
-        channel.write("This is a new line\n")
+        channel.write("This is a new chess line\n")

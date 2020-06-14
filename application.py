@@ -30,19 +30,24 @@ def posts():
     # Each room will have a list of posts which we will read in
     # We will populate the empty list and fetch them for the client here
     # Read from the text file associated with room
+    # NOTE each line has to be ended with a new line, or else the list will be empty
+
+    # IDEA screw the load() function
+    # slap that sucker right into the join function in your chat.js file so you know 
+    # EXACTLY what is goin' down
     
-    # Get amount of posts to be loaded
-    quantity = int(request.form.get("quantity") or 10)
+    # Get channel from client
+    channel = request.form.get("channel")
+    print(f"{channel}.txt")
 
     # Populate list of posts
-    data = []
-
-    # Display 100 posts
-    for i in range(0, quantity):
-        data.append(f"Post #{i + 1}")
+    with open(f"./channels/{channel}.txt", "r") as channel:
+        data = channel.read().splitlines()
+        print(data)
 
     # Return list of posts
     return jsonify(data)
+
 
 ## Socket IO event bucket handlers
 @socketio.on("message")
@@ -64,7 +69,6 @@ def on_join(data):
     username = data['username']
     room = data['room']
     join_room(room)
-    # TODO include other dictionary keys (time, username)
     send({"message": username + ' has entered the ' + room + ' room.', "room": room}, room=room)
 
 @socketio.on('leave')

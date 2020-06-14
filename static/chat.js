@@ -6,8 +6,6 @@ if (!localStorage.getItem('room')) {
     localStorage.setItem('room', 'Lounge');
 };
 
-// Set quantity of posts to be loaded from room CSV (Change to 100)
-const quantity = 10;
 
 // Load posts for room
 function load() {
@@ -21,11 +19,12 @@ function load() {
     };
 
     // Send quantity of posts to back-end
+    // ERROR here where we don't get the actual room the user is in
     const data = new FormData();
-    data.append('quantity', quantity);
+    data.append("channel", localStorage.getItem("room"));
 
     // Send request
-    request.send()
+    request.send(data)
 };
 
 // Add room posts to the DOM with their contents
@@ -115,6 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 leaveRoom(localStorage.getItem('room'));
                 joinRoom(newRoom);
                 localStorage.setItem('room', `${newRoom}`);
+                load();
             }
         };
     });
@@ -129,11 +129,6 @@ document.addEventListener("DOMContentLoaded", () => {
         socket.emit("join", { "username": localStorage.getItem('storedUser'), "room": room})
         // Clear messages in chat from previous room
         document.querySelector("#display-message-section").innerHTML = '';
-        load()
-        // TODO 
-        // Display messages for current room
-        // Append messages to display section ID
-        // document.querySelector("#display-message-section")
     };
 
     // Print system message
