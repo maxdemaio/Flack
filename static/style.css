@@ -1,5 +1,12 @@
 /* Color Palette Docs https://www.color-hex.com/color-palette/25362 */
 /* Icon ideas: https://www.flaticon.com/free-icon/network_3003026 */
+
+/* $color0: #7289da;
+$color1: #ffffff;
+$color2: #99aab5;
+$color3: #2c2f33;
+$color4: #23272a; */
+
 body {
   background-color: #23272a !important;
   color: #ffffff !important; }
@@ -13,5 +20,14 @@ button {
   margin: auto;
   border-radius: 30px;
   text-align: center; }
+
+#wrapper {
+  display: flex;
+}
+
+#sidebar {
+  margin-top: 2em;
+  padding-top: 3em;
+}
 
 /*# sourceMappingURL=style.css.map */

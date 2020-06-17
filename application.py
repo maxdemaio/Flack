@@ -29,12 +29,8 @@ def posts():
     
     # Each room will have a list of posts which we will read in
     # We will populate the empty list and fetch them for the client here
-    # Read from the text file associated with room
+    # Read from the text file associated with room  
     # NOTE each line has to be ended with a new line, or else the list will be empty
-
-    # IDEA screw the load() function
-    # slap that sucker right into the join function in your chat.js file so you know 
-    # EXACTLY what is goin' down
     
     # Get channel from client
     channel = request.form.get("channel")
@@ -53,15 +49,41 @@ def posts():
 @socketio.on("message")
 def message(data):
     """ Broadcast message, username, and time """
+    """ Store message related to room in a text file with the name of that room """
     
-    # TODO 
-    # Store message related to room in a text file with the name of that room
-    # If the CSV file doesn't already exist in rooms dir, create w/ "roomName.csv"
-    # Add message, username, time to new line in CSV
+    #TODO
+    # escape user messages so things like \n \t are ommitted
+    # add user info to message 
+    channel = data["room"]
+    currentTime = strftime('%b-%d %I:%M%p', localtime())
 
+    # Maximum amount of messages stored per channel
+    quantity = 3
+
+    # Add new message to channel delimited by newlines
+    with open(f"./channels/{channel}.txt", "r+") as channel:
+        channelData = channel.read().splitlines()
+        currentLength = len(channelData)
+
+        # Check if maxiumum amount messages reached
+        if currentLength > quantity:
+            # Recreate file and pop first element
+            channel.seek(0)
+            newChannel = channel.readlines()[1:]
+            print(newChannel)
+
+            channel.seek(0)
+            for line in newChannel:
+                channel.write(line)
+            channel.truncate()
+            channel.write(data["username"] + ": " + data["message"] + " (" + currentTime + ")\n")
+
+        else:
+            channel.write(data["username"] + ": " + data["message"] + " (" + currentTime + ")\n")
+            
     print(data)
     send({"message": data["message"], "username": data["username"], 
-    "time": strftime('%b-%d %I:%M%p', localtime()), "room": data["room"]}, room=data["room"])
+    "time": currentTime, "room": data["room"]}, room=data["room"])
 
 @socketio.on('join')
 def on_join(data):

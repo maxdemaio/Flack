@@ -4,22 +4,4 @@ $color1: #ffffff;
 $color2: #99aab5;
 $color3: #2c2f33;
 $color4: #23272a;
-
 /* Icon ideas: https://www.flaticon.com/free-icon/network_3003026 */
-body {
-    background-color: $color4 !important;
-    color: $color1 !important;
-}
-
-button {
-    background-color: $color0;
-}
-
-
-#login {
-    background-color: $color3;
-    padding: 10px;
-    margin: auto;
-    border-radius: 30px;
-    text-align: center;
-}

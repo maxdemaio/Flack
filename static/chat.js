@@ -8,7 +8,7 @@ if (!localStorage.getItem('room')) {
 
 
 // Load posts for room
-function load() {
+function load(channel) {
 
     // Open new request to get posts
     const request = new XMLHttpRequest();
@@ -21,7 +21,7 @@ function load() {
     // Send quantity of posts to back-end
     // ERROR here where we don't get the actual room the user is in
     const data = new FormData();
-    data.append("channel", localStorage.getItem("room"));
+    data.append("channel", channel);
 
     // Send request
     request.send(data)
@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // Clear the input field and disable button again
             document.querySelector("#message").value = "";
             document.querySelector(".submit").disabled = true;
-
+            document.querySelector("#message").focus();
             // Stop form from submitting
             return false;
         };
@@ -114,7 +114,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 leaveRoom(localStorage.getItem('room'));
                 joinRoom(newRoom);
                 localStorage.setItem('room', `${newRoom}`);
-                load();
             }
         };
     });
@@ -127,8 +126,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Join room function
     function joinRoom(room) {
         socket.emit("join", { "username": localStorage.getItem('storedUser'), "room": room})
-        // Clear messages in chat from previous room
+        // Clear messages in chat from previous room, load new messages
         document.querySelector("#display-message-section").innerHTML = '';
+        load(room);
     };
 
     // Print system message
