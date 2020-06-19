@@ -42,6 +42,9 @@ function add_post(contents) {
 
 document.addEventListener("DOMContentLoaded", () => {
 
+    // Set header to be equal to current room
+    document.querySelector("#current-room").innerHTML = localStorage.getItem('room');
+
     // By default the button is disabled
     document.querySelector(".submit").disabled = true;
 
@@ -114,6 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 leaveRoom(localStorage.getItem('room'));
                 joinRoom(newRoom);
                 localStorage.setItem('room', `${newRoom}`);
+                document.querySelector("#current-room").innerHTML = localStorage.getItem('room');
             }
         };
     });

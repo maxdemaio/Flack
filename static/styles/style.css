@@ -21,13 +21,24 @@ button {
   border-radius: 30px;
   text-align: center; }
 
-#wrapper {
+
+.main-section {
   display: flex;
+  margin-top: 4em;
+  height: 100vh;          /* instead of using 100% all over, use viewport units once */
 }
 
 #sidebar {
-  margin-top: 2em;
-  padding-top: 3em;
+  flex: 1;
+  padding-left: 1em;
+  padding-right: 1em;
+  border-right: 0.5px solid #99aab5;
+}
+
+#rightsight-pannel {
+  flex: 4;
+  padding-left: 1em;
+  padding-right: 1em;
 }
 
 /*# sourceMappingURL=style.css.map */
