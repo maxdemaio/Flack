@@ -8,6 +8,7 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 socketio = SocketIO(app)
 
+
 # Chat posts (Limit to 100)
 posts = []
 myRooms = ["Lounge", "Chess", "News", "Coding"]
@@ -43,6 +44,15 @@ def posts():
 
     # Return list of posts
     return jsonify(data)
+
+@app.route("/newChannel", methods=["POST"])
+def newChannel():
+    # TODO
+    # Make it so users can create rooms
+    # Have a route that when the "+" button is clicked, create a new text file in channels/
+    # Client side have a new paragraph to display that the room is available to join
+    # check that name doesn't already exist
+    return
 
 
 ## Socket IO event bucket handlers
