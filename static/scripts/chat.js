@@ -19,7 +19,6 @@ function load(channel) {
     };
 
     // Send quantity of posts to back-end
-    // ERROR here where we don't get the actual room the user is in
     const data = new FormData();
     data.append("channel", channel);
 
@@ -39,6 +38,23 @@ function add_post(contents) {
     document.querySelector("#display-message-section").append(post);
 };
 
+// Add new channel to the DOM
+function add_channel(channel) {
+    console.log(channel);
+
+    // If channel already exists, alert user
+    if (channel.nameExist == true) {
+        alert("Channel name already exists")
+    } else {
+        // Add channel to room list
+        const post = document.createElement("p");
+        post.className = "select-room";
+        post.innerHTML = channel.newChannel;
+
+        // Add post to DOM.
+        document.querySelector("#sidebar").append(post);
+    };
+};
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -94,8 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
             spanTime.innerHTML = data.time;
             spanUser.innerHTML = data.username;
             p.className = "post";
-            p.innerHTML = spanUser.outerHTML + br.outerHTML + data.message
-                + br.outerHTML + spanTime.outerHTML;
+            p.innerHTML = spanUser.outerHTML + ": "+ data.message + " (" + spanTime.outerHTML + ")";
 
             // Append to DOM
             document.querySelector("#display-message-section").append(p);
@@ -121,6 +136,29 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         };
     });
+
+    // New room
+    document.querySelector("#new-room").onclick = () => {
+        var roomName = prompt("Please enter the new room's name", "Example New Room");
+        if (roomName != null) {
+            // Post request to our new room route on server side w/ name
+            const myRequest = new XMLHttpRequest();
+            myRequest.open("POST", "/newChannel");
+            myRequest.onload = () => {
+                // TODO append new Room to DOM (using add room function)
+                const data = JSON.parse(myRequest.responseText);
+                add_channel(data);
+            };
+
+            // Send new channel name to back-end
+            const data = new FormData();
+            data.append("new-channel", roomName);
+
+            // Send request
+            myRequest.send(data)
+
+        };  
+    };
 
     // Leave room function
     function leaveRoom(room) {
