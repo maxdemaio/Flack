@@ -38,23 +38,6 @@ function add_post(contents) {
     document.querySelector("#display-message-section").append(post);
 };
 
-// Add new channel to the DOM
-function add_channel(channel) {
-    console.log(channel);
-
-    // If channel already exists, alert user
-    if (channel.nameExist == true) {
-        alert("Channel name already exists")
-    } else {
-        // Add channel to room list
-        const post = document.createElement("p");
-        post.className = "select-room";
-        post.innerHTML = channel.newChannel;
-
-        // Add post to DOM.
-        document.querySelector("#sidebar").append(post);
-    };
-};
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -120,6 +103,19 @@ document.addEventListener("DOMContentLoaded", () => {
         
     });
 
+    // Leave room function
+    function leaveRoom(room) {
+        socket.emit("leave", { "username": localStorage.getItem('storedUser'), "room": room })
+    };
+
+    // Join room function
+    function joinRoom(room) {
+        socket.emit("join", { "username": localStorage.getItem('storedUser'), "room": room })
+        // Clear messages in chat from previous room, load new messages
+        document.querySelector("#display-message-section").innerHTML = '';
+        load(room);
+    };
+
     // Room selection
     document.querySelectorAll(".select-room").forEach(p => {
         p.onclick = () => {
@@ -136,6 +132,38 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         };
     });
+
+    // Add new channel to the DOM
+    function add_channel(channel) {
+        console.log(channel);
+
+        // If channel already exists, alert user
+        if (channel.nameExist == true) {
+            alert("Channel name already exists")
+        } else {
+            // Add channel to room list
+            const post = document.createElement("p");
+            post.className = "select-room";
+            post.innerHTML = channel.newChannel;
+
+            post.onclick = () => {
+                let newRoom = post.innerHTML;
+                room = localStorage.getItem("room");
+                if (newRoom == room) {
+                    msg = `You are already in the ${room} room.`
+                    printSysMsg(msg);
+                } else {
+                    leaveRoom(localStorage.getItem('room'));
+                    joinRoom(newRoom);
+                    localStorage.setItem('room', `${newRoom}`);
+                    document.querySelector("#current-room").innerHTML = localStorage.getItem('room');
+                };
+            };
+
+            // Add post to DOM.
+            document.querySelector("#new-channels").append(post);
+        };
+    };
 
     // New room
     document.querySelector("#new-room").onclick = () => {
@@ -158,19 +186,6 @@ document.addEventListener("DOMContentLoaded", () => {
             myRequest.send(data)
 
         };  
-    };
-
-    // Leave room function
-    function leaveRoom(room) {
-        socket.emit("leave", { "username": localStorage.getItem('storedUser'), "room": room})
-    };
-
-    // Join room function
-    function joinRoom(room) {
-        socket.emit("join", { "username": localStorage.getItem('storedUser'), "room": room})
-        // Clear messages in chat from previous room, load new messages
-        document.querySelector("#display-message-section").innerHTML = '';
-        load(room);
     };
 
     // Print system message

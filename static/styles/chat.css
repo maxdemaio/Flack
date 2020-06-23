@@ -34,7 +34,6 @@ button {
 }
 
 #input-area input{
-  width: 80%;
   border: 2px solid #99aab5;
   border-radius: 4px;
   outline: none;
@@ -47,5 +46,4 @@ button {
   border-radius: 4px;
   box-sizing: border-box;
 }
-
 
