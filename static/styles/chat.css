@@ -16,7 +16,6 @@ button {
 
 .main-section {
   display: flex;
-  margin-top: 4em;
   height: 100vh;          /* instead of using 100% all over, use viewport units once */
 }
 
@@ -47,3 +46,7 @@ button {
   box-sizing: border-box;
 }
 
+/* Posts */
+.post {
+  background-color: #99aab5;
+}
