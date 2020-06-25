@@ -2,8 +2,35 @@ body {
   background-color: #23272a !important;
   color: #ffffff !important; }
 
+#wrapper {
+  display: flex;
+}
+
+/* Logo */
+#logo {
+  margin: 30px;
+}
+
+/* Responsive Logo Sizing */
+@media screen and ( max-width: 600px ) {img{height: 200px;}}
+@media screen and ( min-width: 601px ) {img{height: 500px;}}
+
+img {
+    border-radius: 10px;
+}
+
+/* Content */
+#content {
+  margin: auto;
+  padding: 20px;
+}
+
 button {
-  background-color: #7289da; }
+  background-color: #7289da; 
+  padding: 8px 12px;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
 
 input{
   border: 2px solid #99aab5;
@@ -12,15 +39,3 @@ input{
   padding: 8px;
   box-sizing: border-box;
 }
-
-button{
-  padding: 8px 12px;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-#login {
-  padding: 10px;
-  margin: auto;
-  border-radius: 30px;
-  text-align: center; }
