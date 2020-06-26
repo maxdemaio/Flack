@@ -16,7 +16,7 @@ button {
 
 .main-section {
   display: flex;
-  height: 100vh;          /* instead of using 100% all over, use viewport units once */
+  height: 100vh; /* Instead of using 100% all over, use viewport units once */
 }
 
 #sidebar {
@@ -46,6 +46,10 @@ button {
   box-sizing: border-box;
 }
 
+/* Idea: each post is a flex box */
+/* it will have 2 rows (user/message, time)
+first row will be in a flexbox container as well 
+use flex basis 50% */
 /* Posts */
 .post {
   background-color: #99aab5;

@@ -13,31 +13,31 @@
 
 <body>
     <div id="wrapper">
-        <div id="logo">
-            <img src="../static/images/flack-logo.png" alt="logo">
+        <div id="logo-container">
+            <img src="../static/images/flack-logo.png" id="logo" alt="logo">
         </div>
 
-        <div id="content">
-            <div id="about">
-                <h2>About</h2>
-                <p>
-                    Flack is a chatting application that allows users to communicate in real time.
-                    Join chatting rooms, communciate with others, and create your own chat rooms.
-                </p>
-
-                <p>
-                    Some more text here.
-                </p>
+        <div id="content-container">
+            <div id="content">
+                <div id="about">
+                    <h2>About</h2>
+                    <p>
+                        Flack is a chatting application that allows users to communicate in real time.
+                        Join chatting rooms, talk with others, and create your own chat rooms. Please choose a
+                        username to sign in with below. As you send messages, your username will be displayed 
+                        to others in the chat room.
+                    </p>
+                </div>
+                
+                <h2>Log in</h2>
+                <form id="new-user" action="/chat" method="GET">
+                    <input id="username" class="input" type="text" placeholder="Display Name" autocomplete="off">
+                    <button class="submit" type="submit">Log in</button>
+                </form>
+                </div>
+                </div>
             </div>
-
-            <h2>Log in</h2>
-            <form id="new-user" action="/chat" method="GET">
-                <input id="username" class="input" type="text" placeholder="Display Name" autocomplete="off">
-                <button class="submit" type="submit">Log in</button>
-            </form>
         </div>
-    </div>
-    
 </body>
 
 </html>

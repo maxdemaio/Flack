@@ -4,28 +4,36 @@ body {
 
 #wrapper {
   display: flex;
+  flex-direction: column;
+  margin: auto;
+  max-width: 600px;
 }
 
 /* Logo */
+#logo-container {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+/* Media queries for small/large screens */
+@media screen and ( max-width: 599px ) {
+  #logo{ width: 300px; }
+}
+@media screen and ( min-width: 600px ) {
+  #logo{ width: 500px; }
+}
 #logo {
-  margin: 30px;
+  border-radius: 10px;
 }
 
-/* Responsive Logo Sizing */
-@media screen and ( max-width: 600px ) {img{height: 200px;}}
-@media screen and ( min-width: 601px ) {img{height: 500px;}}
-
-img {
-    border-radius: 10px;
-}
 
 /* Content */
-#content {
-  margin: auto;
-  padding: 20px;
+#content-container {
+  padding: 5px;
 }
 
-button {
+form button {
   background-color: #7289da; 
   padding: 8px 12px;
   border-radius: 4px;
