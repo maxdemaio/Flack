@@ -9,11 +9,6 @@ app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 socketio = SocketIO(app)
 
 
-# Chat posts (Limit to 100)
-myRooms = []
-for file in os.listdir("./channels"):
-    myRooms.append(file[:-4])
-
 @app.route("/")
 def index():
     """ Homepage """
@@ -22,6 +17,10 @@ def index():
 @app.route("/chat")
 def chat():
     """ Chat """
+    # Show all rooms upon loading
+    myRooms = []
+    for file in os.listdir("./channels"):
+        myRooms.append(file[:-4])
     return render_template("chat.html", rooms=myRooms)
 
 @app.route("/posts", methods=["POST"])
@@ -46,32 +45,6 @@ def posts():
     # Return list of posts
     return jsonify(data)
 
-@app.route("/newChannel", methods=["POST"])
-def newChannel():
-    """ Create a new room """
-
-    newChannel = request.form.get("new-channel")
-    data = {}
-    nameExist = False
-
-    # Check if name doesn't already exist
-    for file in os.listdir("./channels"):
-        fileName = file[:-4].lower()
-        print(fileName)
-        if newChannel.lower() == fileName:
-            # If channel already exists, change boolean variable for JSON
-            nameExist = True
-
-    if nameExist == False:
-        f = open(f"./channels/{newChannel}.txt", "w+")
-        f.close()
-        data["newChannel"] = newChannel
-        data["nameExist"] = nameExist
-    else:
-        data["nameExist"] = nameExist
-    
-    print(data)
-    return jsonify(data)
 
 ## Socket IO event bucket handlers
 @socketio.on("message")
@@ -79,20 +52,14 @@ def message(data):
     """ Broadcast message, username, and time """
     """ Store message related to room in a text file with the name of that room """
     
-    #TODO
-    # escape user messages so things like \n \t are ommitted
-    # add user info to message 
+    # TODO
+    # Escape user messages so things like \n \t are ommitted
     channel = data["room"]
     currentTime = strftime('%b-%d %I:%M%p', localtime())
 
     # Maximum amount of messages stored per channel
     quantity = 100
 
-    # TODO store each as a JSON object rather and delimit by newlines
-    # Add new message to channel delimited by newlines
-    """
-    <span class="username">xyz</span> <span class="message">xyz</span> <span class="time">xyz</span>
-    """
     with open(f"./channels/{channel}.txt", "r+") as channel:
         channelData = channel.read().splitlines()
         currentLength = len(channelData)
@@ -136,6 +103,31 @@ def on_leave(data):
     room = data['room']
     leave_room(room)
     send({"message": username + ' has left the ' + room + ' room.', "room": room}, room=room)
+
+@socketio.on('newChannel')
+def on_newChannel(data):
+    """ Create new channel """
+    newChannel = data["newChannel"]
+    nameExist = False
+
+    # Check if name doesn't already exist
+    for file in os.listdir("./channels"):
+        fileName = file[:-4].lower()
+        print(fileName)
+        if newChannel.lower() == fileName:
+            # If channel already exists, change boolean variable for JSON
+            nameExist = True
+
+    if nameExist == False:
+        f = open(f"./channels/{newChannel}.txt", "w+")
+        f.close()
+        data["newChannel"] = newChannel
+        data["nameExist"] = nameExist
+    else:
+        data["nameExist"] = nameExist
+
+    print(data)
+    emit("newChannel", data, broadcast=True)
 
 
 if __name__ == "__main__":

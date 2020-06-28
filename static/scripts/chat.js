@@ -108,6 +108,38 @@ document.addEventListener("DOMContentLoaded", () => {
         
     });
 
+    // Add new channel to the DOM incoming from backend
+    socket.on("newChannel", data => {
+        console.log(data);
+
+        if (data.nameExist == true) {
+            // Room already exists
+            // Do nothing so every user does not receive error message
+        } else {
+            // Add channel to room list
+            const post = document.createElement("p");
+            post.className = "select-room";
+            post.innerHTML = data.newChannel;
+
+            post.onclick = () => {
+                let newRoom = post.innerHTML;
+                room = localStorage.getItem("room");
+                if (newRoom == room) {
+                    msg = `You are already in the ${room} room.`
+                    printSysMsg(msg);
+                } else {
+                    leaveRoom(localStorage.getItem('room'));
+                    joinRoom(newRoom);
+                    localStorage.setItem('room', `${newRoom}`);
+                    document.querySelector("#current-room").innerHTML = localStorage.getItem('room');
+                };
+            };
+
+            // Add channel to DOM.
+            document.querySelector("#new-channels").append(post);
+        };
+    });
+    
     // Leave room function
     function leaveRoom(room) {
         socket.emit("leave", { "username": localStorage.getItem('storedUser'), "room": room })
@@ -138,59 +170,15 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     });
 
-    // Add new channel to the DOM
-    function add_channel(channel) {
-        console.log(channel);
-
-        // If channel already exists, alert user
-        if (channel.nameExist == true) {
-            alert("Channel name already exists")
-        } else {
-            // Add channel to room list
-            const post = document.createElement("p");
-            post.className = "select-room";
-            post.innerHTML = channel.newChannel;
-
-            post.onclick = () => {
-                let newRoom = post.innerHTML;
-                room = localStorage.getItem("room");
-                if (newRoom == room) {
-                    msg = `You are already in the ${room} room.`
-                    printSysMsg(msg);
-                } else {
-                    leaveRoom(localStorage.getItem('room'));
-                    joinRoom(newRoom);
-                    localStorage.setItem('room', `${newRoom}`);
-                    document.querySelector("#current-room").innerHTML = localStorage.getItem('room');
-                };
-            };
-
-            // Add post to DOM.
-            document.querySelector("#new-channels").append(post);
-        };
-    };
-
     // New room
     document.querySelector("#new-room").onclick = () => {
         var roomName = prompt("Please enter the new room's name", "Example New Room");
         if (roomName != null) {
-            // Post request to our new room route on server side w/ name
-            const myRequest = new XMLHttpRequest();
-            myRequest.open("POST", "/newChannel");
-            myRequest.onload = () => {
-                // TODO append new Room to DOM (using add room function)
-                const data = JSON.parse(myRequest.responseText);
-                add_channel(data);
-            };
-
-            // Send new channel name to back-end
-            const data = new FormData();
-            data.append("new-channel", roomName);
-
-            // Send request
-            myRequest.send(data)
-
-        };  
+            // New room Socketio event to server side w/ name
+            const data = new Object;
+            data.roomName = roomName;
+            socket.emit('newChannel', { "newChannel": roomName });
+        };
     };
 
     // Print system message
