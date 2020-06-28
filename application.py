@@ -86,9 +86,13 @@ def message(data):
     currentTime = strftime('%b-%d %I:%M%p', localtime())
 
     # Maximum amount of messages stored per channel
-    quantity = 3
+    quantity = 100
 
+    # TODO store each as a JSON object rather and delimit by newlines
     # Add new message to channel delimited by newlines
+    """
+    <span class="username">xyz</span> <span class="message">xyz</span> <span class="time">xyz</span>
+    """
     with open(f"./channels/{channel}.txt", "r+") as channel:
         channelData = channel.read().splitlines()
         currentLength = len(channelData)
@@ -104,10 +108,14 @@ def message(data):
             for line in newChannel:
                 channel.write(line)
             channel.truncate()
-            channel.write(data["username"] + ": " + data["message"] + " (" + currentTime + ")\n")
+            channel.write("<span class='user'>" + data["username"] + "</span>" + "<br>" +
+                          "<span class='message'>" + data["message"] + "</span>" + "<br>" +
+                          "<span class='time'>" + currentTime + "</span>" + "\n")
 
         else:
-            channel.write(data["username"] + ": " + data["message"] + " (" + currentTime + ")\n")
+            channel.write("<span class='user'>" + data["username"] + "</span>" + "<br>" +
+                          "<span class='message'>" + data["message"] + "</span>" + "<br>" +
+                          "<span class='time'>" + currentTime + "</span>" + "\n")
             
     print(data)
     send({"message": data["message"], "username": data["username"], 

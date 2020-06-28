@@ -46,11 +46,31 @@ button {
   box-sizing: border-box;
 }
 
-/* Idea: each post is a flex box */
-/* it will have 2 rows (user/message, time)
-first row will be in a flexbox container as well 
-use flex basis 50% */
 /* Posts */
+@keyframes fadeIn {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
 .post {
-  background-color: #99aab5;
+  padding: 0.5em 0.5em 0.5em 1em;
+  width: 70%;
+  background-color: #7289da;
+  border-radius: 5px;
+  border-color: #99aab5;
+  border-width: 1px;
+  border-style: solid;
+   /* animation */
+  animation-name: fadeIn;
+  animation-duration: 0.75s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-in-out;
+}
+
+.user {
+  font-weight: bold;
+}
+
+.time {
+  font-weight: lighter;
 }

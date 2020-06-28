@@ -86,14 +86,19 @@ document.addEventListener("DOMContentLoaded", () => {
     socket.on("message", data => {
         const p = document.createElement('p');
         const spanUser = document.createElement('span');
-        const br = document.createElement('br');
+        const spanMessage = document.createElement('span');
         const spanTime = document.createElement('span');
+        const br = document.createElement('br');
 
         if (data.username) {
             spanTime.innerHTML = data.time;
+            spanTime.className = "time";
             spanUser.innerHTML = data.username;
+            spanUser.className = "user";
+            spanMessage.innerHTML = data.message;
+            spanMessage.className = "message";
             p.className = "post";
-            p.innerHTML = spanUser.outerHTML + ": "+ data.message + " (" + spanTime.outerHTML + ")";
+            p.innerHTML = spanUser.outerHTML + br.outerHTML + spanMessage.outerHTML + br.outerHTML + spanTime.outerHTML;
 
             // Append to DOM
             document.querySelector("#display-message-section").append(p);
